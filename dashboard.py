@@ -82,8 +82,8 @@ try:
     with col1:
         fig_light = px.line(
             df_time, x='Time', y='Utilization_%', 
-            title="Light Intensity Proxy (Capacity Utilization %)",
-            labels={'Utilization_%': 'Intensity (%)'},
+            title="Capacity Utilization %",
+            labels={'Utilization_%': 'Utilisation (%)'},
             color_discrete_sequence=['#FFD700']
         )
         st.plotly_chart(fig_light, use_container_width=True)
@@ -114,8 +114,8 @@ try:
     with col5:
         if not df_top_4.empty:
             fig_bar = px.bar(
-                df_top_4, x='Region_Name', y='Intensity_Proxy', 
-                title="Top 4 Regions by Light Intensity",
+                df_top_4, x='Region_Name', y='Utilisation', 
+                title="Top 4 Regions by Utilisation",
                 color='Intensity_Proxy', color_continuous_scale='YlOrRd'
             )
             fig_bar.update_layout(coloraxis_showscale=False)
