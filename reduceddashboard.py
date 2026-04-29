@@ -2,21 +2,21 @@ import streamlit as st
 import pandas as pd
 import plotly.express as px
 from pvlive_api import PVLive
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 
 # --- DASHBOARD CONFIGURATION ---
 st.set_page_config(layout="wide", page_title="Solar Panel Generation Output")
 
 st.title("☀️ Solar Panel Generation Output")
-st.markdown("### Near-Real-Time Data (Great Britain) - Timezone: GMT+8")
+st.markdown("### Near-Real-Time Data (Great Britain)")
 
 # --- DATA FETCHING LOGIC ---
 pvl = PVLive()
-
+GMT8 = timezone(timedelta(hours=8))
 @st.cache_data(ttl=1800)
 def fetch_solar_data():
     # 1. Fetch National History (24 Hours)
-    end_date = datetime.now()
+    end_date = datetime.now(GMT8)
     start_date = end_date - timedelta(days=1)
     
     df_history = pvl.between(
