@@ -9,7 +9,7 @@ st.title("Solar Panel Generation Output (Europe)")
 # --- MOCK DATA LOADING (Replace with OPSD CSV/API) ---
 # In a real app, use pd.read_csv("https://data.open-power-system-data.org/...")
 df_time = pd.DataFrame({
-    'Time': pd.date_range(start='2024-01-01', periods=24, freq='H'),
+    'Time': pd.date_range(start='2024-01-01', periods=24, freq='h'),
     'Irradiance': [100, 150, 300, 600, 800, 950, 1000, 900, 700, 400, 200, 50] * 2,
     'Power': [10, 25, 60, 120, 180, 210, 230, 200, 150, 80, 40, 10] * 2
 })
