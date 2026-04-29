@@ -16,7 +16,7 @@ pvl = PVLive()
 @st.cache_data(ttl=1800)
 def fetch_solar_data():
     # 1. Fetch National History (24 Hours)
-    end_date = datetime.now()
+    end_date = datetime.now(timezone.utc)
     start_date = end_date - timedelta(days=1)
     
     df_history = pvl.between(
