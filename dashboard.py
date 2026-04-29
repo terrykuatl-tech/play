@@ -114,7 +114,7 @@ try:
     with col5:
         if not df_top_4.empty:
             fig_bar = px.bar(
-                df_top_4, x='Region_Name', y='Utilization', 
+                df_top_4, x='Region_Name', y='utilization', 
                 title="Top 4 Regions by Utilisation",
                 color='Intensity_Proxy', color_continuous_scale='YlOrRd'
             )
