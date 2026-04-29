@@ -2,7 +2,7 @@ import streamlit as st
 import pandas as pd
 import plotly.express as px
 from pvlive_api import PVLive
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 
 # --- DASHBOARD CONFIGURATION ---
 st.set_page_config(layout="wide", page_title="Live Solar Intensity Dashboard")
