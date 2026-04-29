@@ -29,7 +29,7 @@ def fetch_solar_data():
     
     # Process history and convert to GMT+8
     df_history = df_history.rename(columns={'datetime_gmt': 'Time', 'generation_mw': 'Power'})
-    df_history['Time'] = pd.to_datetime(df_history['Time']) + timedelta(hours=8)
+    #df_history['Time'] = pd.to_datetime(df_history['Time']) + timedelta(hours=8)
     
     # 2. Fetch Regional Data for the Bar Chart
     pes_map = {
