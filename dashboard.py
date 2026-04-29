@@ -12,11 +12,11 @@ st.markdown("### Near-Real-Time Data (Great Britain)")
 
 # --- DATA FETCHING LOGIC ---
 pvl = PVLive()
-
+GMT8 = timezone(timedelta(hours=8))
 @st.cache_data(ttl=1800)
 def fetch_solar_data():
     # 1. Fetch National History (24 Hours)
-    end_date = datetime.now(timezone.utc)
+    end_date = datetime.now(GMT8)
     start_date = end_date - timedelta(days=1)
     
     df_history = pvl.between(
