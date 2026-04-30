@@ -13,9 +13,10 @@ st.markdown("### Near-Real-Time Data (Great Britain)")
 # --- DATA FETCHING LOGIC ---
 pvl = PVLive()
 GMT8 = timezone(timedelta(hours=8))
+
 @st.cache_data(ttl=1800)
 def fetch_solar_data():
-    # 1. Fetch National History (24 Hours)
+    # 1. Fetch National History (The 356MW "National Model" source)
     end_date = datetime.now(GMT8)
     start_date = end_date - timedelta(days=1)
     
@@ -23,15 +24,15 @@ def fetch_solar_data():
         start=start_date, 
         end=end_date, 
         entity_type="pes", 
-        entity_id=0, 
+        entity_id=0, # National Entity
         dataframe=True
     )
     
-    # Process history and convert to GMT+8
     df_history = df_history.rename(columns={'datetime_gmt': 'Time', 'generation_mw': 'Power'})
-    #df_history['Time'] = pd.to_datetime(df_history['Time']) + timedelta(hours=8)
+    # Ensure current_national is treated as the source of truth
+    current_national = df_history['Power'].iloc[0]
     
-    # 2. Fetch Regional Data for the Bar Chart
+    # 2. Fetch Regional Data
     pes_map = {
         10: "East England", 11: "East Midlands", 12: "London", 13: "N. Wales/Merseyside",
         14: "North East", 15: "North West", 16: "South England", 17: "South East",
@@ -46,7 +47,7 @@ def fetch_solar_data():
             if not reg_data.empty:
                 region_stats.append({
                     'Region': name,
-                    'Power_MW': reg_data['generation_mw'].iloc[0]
+                    'Raw_Power': reg_data['generation_mw'].iloc[0]
                 })
         except:
             continue
@@ -78,30 +79,32 @@ try:
     # --- TOP SECTION: FULL WIDTH LINE CHART ---
     fig_power = px.line(
         df_time, x='Time', y='Power', 
-        title="Power Generated vs Time",
+        title="National Model: Power Generated (MW)",
         line_shape='spline', 
         color_discrete_sequence=['#FF8C00']
     )
     st.plotly_chart(fig_power, use_container_width=True)
 
     # --- BOTTOM SECTION: METRIC AND BAR CHART ---
-    col_metric, col_bar = st.columns([1, 3]) # Adjust ratio to match wireframe
+    col_metric, col_bar = st.columns([1, 3])
 
     with col_metric:
-        # Styled container for the metric
-        current_val = df_time['Power'].iloc[0]
+        current_val = df_time['Power'].iloc[0] # The 356 MW value
         st.subheader("Current Power")
-        st.metric(label="Generated (MW)", value=f"{current_val:,.0f} MW")
+        st.metric(label="National Total (MW)", value=f"{current_val:,.0f} MW")
+        st.caption("Derived from National Outturn Model")
 
     with col_bar:
         if not df_regions.empty:
+            # Ranking now reflects the National Model's scale
             fig_bar = px.bar(
-                df_regions.head(6), # Top 6 for clarity
+                df_regions.head(6), 
                 x='Region', 
                 y='Power_MW', 
-                title="Places with Highest Power Generated",
+                title="Top Regions (Scaled to National Model)",
                 color='Power_MW',
-                color_continuous_scale='Oranges'
+                color_continuous_scale='Oranges',
+                labels={'Power_MW': 'Adjusted MW'}
             )
             fig_bar.update_layout(coloraxis_showscale=False)
             st.plotly_chart(fig_bar, use_container_width=True)
