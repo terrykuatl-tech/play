@@ -51,7 +51,23 @@ def fetch_solar_data():
         except:
             continue
             
-    df_regions = pd.DataFrame(region_stats).sort_values('Power_MW', ascending=False)
+    df_regions = pd.DataFrame(region_stats)
+    
+    # --- CALIBRATION LOGIC ---
+    # To fix the "356MW National vs 2MW Regional" issue, we distribute the National 
+    # figure across the regions based on their contribution percentage.
+    total_regional_sum = df_regions['Raw_Power'].sum()
+    
+    if total_regional_sum > 0:
+        # Scale the regional values so they sum up to the National Model total
+        scaling_factor = current_national / total_regional_sum
+        df_regions['Power_MW'] = df_regions['Raw_Power'] * scaling_factor
+    else:
+        # Fallback: If regions are all 0 but National is 356, we show 0 
+        # (The models are out of sync during dawn/dusk)
+        df_regions['Power_MW'] = df_regions['Raw_Power']
+
+    df_regions = df_regions.sort_values('Power_MW', ascending=False)
     
     return df_history, df_regions
 
