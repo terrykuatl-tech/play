@@ -104,7 +104,7 @@ try:
                 title="Top Regions",
                 color='Power_MW',
                 color_continuous_scale='Oranges',
-                labels={'Power_MW': 'Adjusted MW'}
+                labels={'Power_MW': 'Power MW'}
             )
             fig_bar.update_layout(coloraxis_showscale=False)
             st.plotly_chart(fig_bar, use_container_width=True)
