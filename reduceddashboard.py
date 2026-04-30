@@ -62,7 +62,7 @@ try:
     # --- TOP SECTION: FULL WIDTH LINE CHART ---
     fig_power = px.line(
         df_time, x='Time', y='Power', 
-        title="Power Generated vs Time (GMT+8)",
+        title="Power Generated vs Time",
         line_shape='spline', 
         color_discrete_sequence=['#FF8C00']
     )
