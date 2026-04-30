@@ -92,7 +92,7 @@ try:
         current_val = df_time['Power'].iloc[0] # The 356 MW value
         st.subheader("Current Power")
         st.metric(label="National Total (MW)", value=f"{current_val:,.0f} MW")
-        st.caption("Derived from National Outturn Model")
+        #st.caption("Derived from National Outturn Model")
 
     with col_bar:
         if not df_regions.empty:
@@ -101,7 +101,7 @@ try:
                 df_regions.head(6), 
                 x='Region', 
                 y='Power_MW', 
-                title="Top Regions (Scaled to National Model)",
+                title="Top Regions",
                 color='Power_MW',
                 color_continuous_scale='Oranges',
                 labels={'Power_MW': 'Adjusted MW'}
